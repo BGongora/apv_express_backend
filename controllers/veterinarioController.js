@@ -38,7 +38,7 @@ const perfil = (req, res) => {
     
     const { veterinario } = req;
     
-    res.json({perfil: veterinario});
+    res.json(veterinario);
 };
 
 const confirmar = async (req, res) => {
@@ -73,7 +73,7 @@ const autenticar = async (req, res) => {
     const usuario = await Veterinario.findOne({email});
 
     if(!usuario) {
-        const error = new Error('El usuario si existe');
+        const error = new Error('No existe una cuenta con este email');
         return res.status(403).json({msg: error.message});
     } 
 
@@ -87,7 +87,12 @@ const autenticar = async (req, res) => {
         //Revisar el password
         if(await usuario.comprobarPassword(password)) {
             //Autenticar
-            res.json({token: generarJWT(usuario.id)});
+            res.json({
+                _id: usuario._id,
+                nombre: usuario.nombre,
+                email: usuario.email,
+                token: generarJWT(usuario.id)
+            });
         } else {
             const error = new Error('El password es incorrecto');
             return res.status(403).json({msg: error.message});

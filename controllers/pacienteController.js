@@ -56,6 +56,7 @@ const actualizarPaciente = async (req, res) => {
                     paciente[key] = req.body[key]; 
                 });
                 const pacienteActualizado = await paciente.save();
+                console.log(pacienteActualizado)
                 res.json(pacienteActualizado);
             } catch (error) {
                 return res.status(500).json({error: error.message});
